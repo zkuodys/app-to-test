@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+    /* Some basic styling for the page */
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .item-list {
+      margin-top: 10px;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .item-name {
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+
+    .item-count {
+      width: 50px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<!-- Input section for adding items -->
+<div>
+    <label for="item-name-input">Item Name:</label>
+    <input id="item-name-input" type="text" />
+    <label for="item-count-input">Count:</label>
+    <input id="item-count-input" type="number" min="1" />
+    <button id="add-item-button">Add Item</button>
+</div>
+
+<!-- List of items -->
+<div class="item-list">
+</div>
+
+<script>
+    const itemNameInput = document.getElementById('item-name-input');
+    const itemCountInput = document.getElementById('item-count-input');
+    const addItemButton = document.getElementById('add-item-button');
+    const itemListDiv = document.querySelector('.item-list');
+
+    // Set up event listeners
+    addItemButton.addEventListener('click', () => {
+      const itemName = itemNameInput.value;
+      const itemCount = parseInt(itemCountInput.value);
+
+      // Check if the item already exists in the list
+      let existingItemDiv = null;
+      for (const itemDiv of itemListDiv.children) {
+        if (itemDiv.querySelector('.item-name').textContent === itemName) {
+          existingItemDiv = itemDiv;
+          break;
+        }
+      }
+
+      let itemDiv;
+
+      if (existingItemDiv) {
+        const existingCount = parseInt(existingItemDiv.querySelector('.item-count').textContent);
+        existingItemDiv.querySelector('.item-count').textContent = existingCount + itemCount;
+        itemDiv = null;
+      } else {
+        itemDiv = document.createElement('div');
+        itemDiv.classList.add('item');
+        itemDiv.innerHTML = `
+          <div class="item-name">${itemName}</div>
+          <div class="item-count">${itemCount}</div>
+        `;
+
+        itemListDiv.appendChild(itemDiv);
+      }
+
+      // Clear the input field
+      itemNameInput.value = '';
+      itemCountInput.value = '';
+    });
+
+</script>
+</body>
+</html>
